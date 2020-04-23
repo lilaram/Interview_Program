@@ -1,0 +1,36 @@
+---
+- hosts: localhost
+  connection: local
+  gather_facts: false
+  vars_prompt:
+    - name: "key"
+      prompt: "copy & paste public key on console"
+  tasks:
+    - name: interview-terraform-1587637499
+      ec2_key:
+        name: interview-terraform-1587637499
+        region: us-east-1
+        key_material: "{{ key }}"
+        force: false
+        debug: "{{ key }}"
+
+
+
+
+- hosts: localhost
+  connection: local
+  gather_facts: false
+  tasks:
+    - set_fact:
+        pub_key: "{{ lookup('file', 'id_rsa.pub') }}"
+    - debug:
+        msg: "{{ pub_key }}"
+    - ec2_key:
+        name: interview-terraform-1587637499
+        region: us-east-1
+        key_material: "{{ pub_key }}"
+        force: false
+
+
+aws ec2 describe-key-pairs --key-name sshkeypair
+
