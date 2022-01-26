@@ -1,0 +1,18 @@
+Using OpenSSL software we created CA, Server Certificate and User SSL certificates 
+Commands used for the Creation of certificate 
+1. CA/Root Certificate 
+CA KEY FILE  -- openssl genrsa -aes256 -out labca-key.pem 4096
+CA File  -- openssl req -x509 -new -nodes -extensions v3_ca -key labca-key.pem -days 365 -out labca-root.pem -sha512
+
+
+2. Server Certificate 
+KEY file --  openssl genrsa -out server.key 4096
+CSR/req File -- openssl req -key server.key -new -out server.req
+Server Certificate Signing With CA  -- openssl x509 -req -in server.req -CA labca-root.pem -CAkey labca-key.pem -CAcreateserial -out server.pem
+
+
+3. User Certificate 
+Key File -- openssl genrsa -out user.key 4096
+CSR/req File ---   openssl req -key user.key -new -out user.req
+User Certificate Signing With CA -- openssl x509 -req -in user.req -CA labca-root.pem -CAkey labca-key.pem -CAcreateserial -out user.pem 
+Convert To PFX format ---   openssl pkcs12 -export -out user.pfx -inkey user.key -in user.pem
